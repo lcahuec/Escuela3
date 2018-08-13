@@ -15,7 +15,6 @@ namespace Escuela3.Controllers
     public class EstudiantesController : ApiController
     {
         private Escuela3Entities db = new Escuela3Entities();
-
         // Metodo para Mostrar los datos 
         public IEnumerable<Estudiante> GetAllEstudiante()
         {
