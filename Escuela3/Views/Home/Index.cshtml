@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Escuela3.Models.Estudiante>
+@{
+    ViewBag.Title = "Datos";
+}
+
+<h1 align="center">Datos de Alumnos</h1>
+@*Busqueda por ID*@
+<p>
+    @Html.Label("Ingrese ID")<br />
+    <input type="text" id="EstudianteId"/>
+    <input type="button" value="Buscar" class="btn btn-info"" onclick="Busqueda();" />
+    <br />
+
+</p>
+@*Encabezado para mostrar los datos extraidos del modelo*@
+<div>
+    <table class="table">
+        <tr class="barra">
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Carnet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombres)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellidos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Curso)
+            </th>
+            <th></th>
+        </tr>
+
+    </table>
+
+    <ul id="ver" />
+
+
+
+</div>
+
+@*Libreria para utilizar el Jquery*@
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+
+@*Script para realizar los Query*@
+<script>
+
+    var uri = 'api/Estudiantes';
+
+    // Consulta el uri para luego recorrerlo y se le da formato
+    $(document).ready(function ()
+    {
+        $.getJSON(uri).done(function (data)
+        {
+            $.each(data, function (key, item )
+            {
+                $('<ul>', { text: formatItem(item) }).appendTo($('#ver'));
+             });
+        });
+    });
+
+    //Funcion para mostrar los items
+    function formatItem(item)
+    {
+        return item.Id + '------' + item.Carnet + '-------' + item.Nombres + '-------' + item.Apellidos + '-------' + item.Curso;
+    }
+
+    //Funcion Para Buscar por ID
+    function Busqueda()
+    {
+        var id = $('#EstudianteId').val();
+        $.getJSON(uri + '/' + id).done(function (data)
+        {
+            $('#ver').text(formatItem(data));
+            $('input[type="text"]').val('');
+            
+        }).fail(function (jqXHR, textStatus, err)
+        {
+            $('#ver').text('No Exsiste el dato: ' + err);
+        });
+    }
+
+
+</script>
